@@ -8,6 +8,7 @@ import 'package:wanandroid/bean/RegisterInfo.dart';
 import 'package:dio/dio.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 
+//注册页
 class RegisterPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {

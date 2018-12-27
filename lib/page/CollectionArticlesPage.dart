@@ -6,6 +6,7 @@ import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 
+//收藏页
 class CollectionArticlesPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -38,37 +39,7 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>{
     );
   }
 
-  Widget buildArticles(){
-    return ListView.builder(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        itemCount: _articles.length * 2,
-        itemBuilder: (BuildContext context, int i){
-          if(i.isOdd){
-            return new Divider();
-          }
-          final index = i ~/ 2;
-          if(index >= _articles.length){
-            _getArticles(page: _page++);
-          }
-          return _buildRow(_articles[index], index);
-        });
-  }
-
-
-  void _getArticles({int page=0}) async {
-    Result  result = await NetManager.getInstance().request("/lg/collect/list/$page/json", null, Options(
-        method: "GET"));
-    if(result.errorCode == 0){
-      setState(() {
-        Articles articles = Articles.fromJson(result.data);
-        print(articles.toString());
-        _articles.addAll(articles.datas);
-      });
-    }else{
-      ToastUtil.showError(result.errorMsg);
-    }
-  }
-
+  //单个item的绘制
   Widget _buildRow(Article article, int index) {
     return ListTile(
       title: Text(
@@ -90,6 +61,40 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>{
     );
   }
 
+  //组合收藏列表成为一个ListView
+  Widget buildArticles(){
+    return ListView.builder(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        itemCount: _articles.length * 2,
+        itemBuilder: (BuildContext context, int i){
+          if(i.isOdd){
+            return new Divider();
+          }
+          final index = i ~/ 2;
+          if(index >= _articles.length){
+            _getArticles(page: _page++);
+          }
+          return _buildRow(_articles[index], index);
+        });
+  }
+
+
+  //获取收藏的文章列表
+  void _getArticles({int page=0}) async {
+    Result  result = await NetManager.getInstance().request("/lg/collect/list/$page/json", null, Options(
+        method: "GET"));
+    if(result.errorCode == 0){
+      setState(() {
+        Articles articles = Articles.fromJson(result.data);
+        print(articles.toString());
+        _articles.addAll(articles.datas);
+      });
+    }else{
+      ToastUtil.showError(result.errorMsg);
+    }
+  }
+
+  //取消收藏
   void _collect(Article article, int index) async{
       Result result = await NetManager.getInstance().request(
           "/lg/uncollect/${article.id}/json", null, Options(

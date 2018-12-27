@@ -10,7 +10,7 @@ class Page extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: "sss",
+      title: "wanandroid",
       home: LoginPage(),
     );
   }

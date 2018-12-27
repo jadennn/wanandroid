@@ -6,6 +6,7 @@ import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 
+//文章页
 class ArticlesPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -39,6 +40,7 @@ class ArticlesPageState extends State<ArticlesPage>{
     );
   }
 
+  //组合item成为一个ListView
   Widget buildArticles(){
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -55,21 +57,7 @@ class ArticlesPageState extends State<ArticlesPage>{
         });
   }
 
-
-   void _getArticles({int page=0}) async {
-    Result  result = await NetManager.getInstance().request("/article/list/$page/json", null, Options(
-        method: "GET"));
-    if(result.errorCode == 0){
-      setState(() {
-        Articles articles = Articles.fromJson(result.data);
-        print(articles.toString());
-        _articles.addAll(articles.datas);
-      });
-    }else{
-      ToastUtil.showError(result.errorMsg);
-     }
-  }
-
+  //单个item元素
   Widget _buildRow(Article article, int index) {
     return ListTile(
       title: Text(
@@ -91,6 +79,22 @@ class ArticlesPageState extends State<ArticlesPage>{
     );
   }
 
+  //按页获取文章列表
+  void _getArticles({int page=0}) async {
+    Result  result = await NetManager.getInstance().request("/article/list/$page/json", null, Options(
+        method: "GET"));
+    if(result.errorCode == 0){
+      setState(() {
+        Articles articles = Articles.fromJson(result.data);
+        print(articles.toString());
+        _articles.addAll(articles.datas);
+      });
+    }else{
+      ToastUtil.showError(result.errorMsg);
+    }
+  }
+
+  //收藏，取消收藏
   void _collect(Article article, int index) async{
     if(article.collect){
       Result result = await NetManager.getInstance().request(
