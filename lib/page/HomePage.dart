@@ -46,4 +46,10 @@ class HomePageState extends State<HomePage>{
       });
     }
   }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 }

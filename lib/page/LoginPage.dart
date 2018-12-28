@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                           text: _username,
                           selection: TextSelection.fromPosition(TextPosition(
                               affinity: TextAffinity.downstream,
-                              offset: _username.length
+                              offset: _username==null?0:_username.length
                           ))
                       )
                       ),
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                           text: _password,
                           selection: TextSelection.fromPosition(TextPosition(
                               affinity: TextAffinity.downstream,
-                              offset: _password.length
+                              offset: _password==null?0:_password.length
                           ))
                       )
                       ),
@@ -93,7 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                                 return new RegisterPage();
                               })).then((value){
                                 setState(() {
-                                  _username = value;
+                                  if(value != null) {
+                                    _username = value;
+                                  }
                                 });
                           });
                         },

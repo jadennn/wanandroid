@@ -17,9 +17,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _username = "123";
-  String _password = "123";
-  String _repassword = "123";
+  String _username = "";
+  String _password = "";
+  String _repassword = "";
 
   @override
   Widget build(BuildContext context) {

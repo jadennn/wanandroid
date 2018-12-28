@@ -34,9 +34,11 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>{
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: buildArticles(),
-    );
+    return
+      SafeArea(top: true,
+      child: MaterialApp(
+        home: buildArticles(),
+      ),);
   }
 
   //单个item的绘制
@@ -86,7 +88,6 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>{
     if(result.errorCode == 0){
       setState(() {
         Articles articles = Articles.fromJson(result.data);
-        print(articles.toString());
         _articles.addAll(articles.datas);
       });
     }else{
