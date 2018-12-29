@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -36,87 +34,81 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-          child:Flex(
-              direction: Axis.vertical,
+            child: Flex(
+      direction: Axis.vertical,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Image(
+            image: AssetImage("images/logo.png"),
+            height: 100,
+            width: 100,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 80),
+          child: Column(
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Icon(Icons.blur_circular),
+              TextField(
+                controller: TextEditingController.fromValue(TextEditingValue(
+                    text: _username,
+                    selection: TextSelection.fromPosition(TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _username == null ? 0 : _username.length)))),
+                decoration: InputDecoration(labelText: "账号"),
+                onChanged: _onUsernameChanged,
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(40, 0, 40, 80),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      controller: TextEditingController.fromValue(TextEditingValue(
-                          text: _username,
-                          selection: TextSelection.fromPosition(TextPosition(
-                              affinity: TextAffinity.downstream,
-                              offset: _username==null?0:_username.length
-                          ))
-                      )
-                      ),
-                      decoration: InputDecoration(
-                          labelText: "账号"
-                      ),
-                      onChanged: _onUsernameChanged,
-                    ),
-                    TextField(
-                      controller: TextEditingController.fromValue(TextEditingValue(
-                          text: _password,
-                          selection: TextSelection.fromPosition(TextPosition(
-                              affinity: TextAffinity.downstream,
-                              offset: _password==null?0:_password.length
-                          ))
-                      )
-                      ),
-                      decoration: InputDecoration(
-                        labelText: "密码",
-                      ),
-                      obscureText: true,
-                      onChanged: _onPasswordChanged,
-                    ),
-                    Container(
-                      child: FlatButton(
-                          color: Colors.blueGrey,
-                          textColor: Colors.white,
-                          onPressed: _loginOnPressed,
-                          child: Text("登陆")),
-                      width: 2000,
-                      margin: EdgeInsets.only(top: 30),
-                    ),
-                    Container(
-                      child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, new MaterialPageRoute(
-                              builder: (context){
-                                return new RegisterPage();
-                              })).then((value){
-                                setState(() {
-                                  if(value != null) {
-                                    _username = value;
-                                  }
-                                });
-                          });
-                        },
-                        child: Text("注册账号",
-                        style: TextStyle(
-                          color: Colors.blue
-                        ),),
-                      ),
-                      margin: EdgeInsets.only(top: 10),
-                    )
-                  ],
+              TextField(
+                controller: TextEditingController.fromValue(TextEditingValue(
+                    text: _password,
+                    selection: TextSelection.fromPosition(TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _password == null ? 0 : _password.length)))),
+                decoration: InputDecoration(
+                  labelText: "密码",
                 ),
+                obscureText: true,
+                onChanged: _onPasswordChanged,
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Text("v" + _version),
+                child: FlatButton(
+                    color: Colors.blueGrey,
+                    textColor: Colors.white,
+                    onPressed: _loginOnPressed,
+                    child: Text("登陆")),
+                width: 2000,
+                margin: EdgeInsets.only(top: 30),
+              ),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (context) {
+                      return new RegisterPage();
+                    })).then((value) {
+                      setState(() {
+                        if (value != null) {
+                          _username = value;
+                        }
+                      });
+                    });
+                  },
+                  child: Text(
+                    "注册账号",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+                margin: EdgeInsets.only(top: 10),
               )
             ],
-          )
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Text("v" + _version),
         )
-    );
+      ],
+    )));
   }
 
   void _onUsernameChanged(String username) {
@@ -127,32 +119,35 @@ class _LoginPageState extends State<LoginPage> {
     _password = password;
   }
 
-
-  void _loginOnPressed() async{
+  void _loginOnPressed() async {
     LoginInfo li = new LoginInfo(_username, _password);
-    Result  result = await NetManager.getInstance().request("/user/login", li.toKeyValue(), Options(
-        method: "POST",
-        contentType: ContentType.parse("application/x-www-form-urlencoded")) );
-    if(result.errorCode == 0){
+    Result result = await NetManager.getInstance().request(
+        "/user/login",
+        li.toKeyValue(),
+        Options(
+            method: "POST",
+            contentType:
+                ContentType.parse("application/x-www-form-urlencoded")));
+    if (result.errorCode == 0) {
       ToastUtil.showTips("登陆成功");
-      Navigator.push(context, new MaterialPageRoute(
-          builder: (context){
-            return new HomePage(userInfo:UserInfo.fromJson(result.data));
-          },
-          maintainState: false));
-    }else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(
+              builder: (context) {
+                return new HomePage(userInfo: UserInfo.fromJson(result.data));
+              },),
+              (route) => route == null);
+    } else {
       ToastUtil.showError(result.errorMsg);
     }
   }
 
-
   //获取版本号
-  void _init() async{
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo){
+  void _init() async {
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       setState(() {
         _version = packageInfo.version;
       });
     });
   }
-
 }

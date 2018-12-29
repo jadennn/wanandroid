@@ -33,7 +33,8 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
       json['type'] as int,
       json['userId'] as int,
       json['visible'] as int,
-      json['zan'] as int);
+      json['zan'] as int,
+      json['originId'] as int);
 }
 
 Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
@@ -59,5 +60,6 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
       'type': instance.type,
       'userId': instance.userId,
       'visible': instance.visible,
-      'zan': instance.zan
+      'zan': instance.zan,
+      'originId': instance.originId
     };

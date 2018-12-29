@@ -31,6 +31,7 @@ class Article{
   int userId;
   int visible;
   int zan;
+  int originId;
 
   Article(
       this.apkLink,
@@ -55,7 +56,8 @@ class Article{
       this.type,
       this.userId,
       this.visible,
-      this.zan
+      this.zan,
+      this.originId,
       );
 
   factory Article.fromJson(Map<String, dynamic> json) => _$ArticleFromJson(json);

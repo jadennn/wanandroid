@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -25,53 +24,53 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child:Flex(
-              direction: Axis.vertical,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Icon(Icons.blur_circular),
+            child: Flex(
+      direction: Axis.vertical,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Image(
+            image: AssetImage("images/logo.png"),
+            height: 100,
+            width: 100,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 80),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: "账号"),
+                onChanged: _onUsernameChanged,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "密码",
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(40, 0, 40, 80),
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: "账号"
-                        ),
-                        onChanged: _onUsernameChanged,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "密码",
-                        ),
-                        obscureText: true,
-                        onChanged: _onPasswordChanged,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "确认密码",
-                        ),
-                        obscureText: true,
-                        onChanged: _onRePasswordChanged,
-                      ),
-                      Container(
-                        child: FlatButton(
-                            color: Colors.blueGrey,
-                            textColor: Colors.white,
-                            onPressed: _registerOnPressed,
-                            child: Text("注册")),
-                        width: 2000,
-                        margin: EdgeInsets.only(top: 30),
-                      ),
-                    ],
-                  ),
+                obscureText: true,
+                onChanged: _onPasswordChanged,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "确认密码",
                 ),
-              ],
-            )
-        )
-    );
+                obscureText: true,
+                onChanged: _onRePasswordChanged,
+              ),
+              Container(
+                child: FlatButton(
+                    color: Colors.blueGrey,
+                    textColor: Colors.white,
+                    onPressed: _registerOnPressed,
+                    child: Text("注册")),
+                width: 2000,
+                margin: EdgeInsets.only(top: 30),
+              ),
+            ],
+          ),
+        ),
+      ],
+    )));
   }
 
   void _onUsernameChanged(String username) {
@@ -87,17 +86,20 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   //注册
-  void _registerOnPressed() async{
+  void _registerOnPressed() async {
     RegisterInfo ri = new RegisterInfo(_username, _password, _repassword);
-    Result  result = await NetManager.getInstance().request("/user/register", ri.toKeyValue(), Options(
-        method: "POST",
-        contentType: ContentType.parse("application/x-www-form-urlencoded")) );
-    if(result.errorCode == 0){
+    Result result = await NetManager.getInstance().request(
+        "/user/register",
+        ri.toKeyValue(),
+        Options(
+            method: "POST",
+            contentType:
+                ContentType.parse("application/x-www-form-urlencoded")));
+    if (result.errorCode == 0) {
       ToastUtil.showTips("注册成功");
       Navigator.pop(context, _username);
-    }else {
+    } else {
       ToastUtil.showError(result.errorMsg);
     }
   }
-
 }

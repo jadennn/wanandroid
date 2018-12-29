@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:banner_view/banner_view.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Articles.dart';
 import 'package:wanandroid/bean/Result.dart';
@@ -16,7 +17,7 @@ class ArticlesPage extends StatefulWidget {
   }
 }
 
-class ArticlesPageState extends State<ArticlesPage> {
+class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClientMixin{
   final _articles = <Article>[];
   final _banners = <bean.Banner>[];
   int _page = 0;
@@ -33,30 +34,46 @@ class ArticlesPageState extends State<ArticlesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(top: true,
+    return SafeArea(
+      top: true,
       child: Scaffold(
         body: Column(
           children: <Widget>[
-              _banners.length ==0 ? Image.network("http://www.wanandroid.com/blogimgs/ab17e8f9-6b79-450b-8079-0f2287eb6f0f.png") :
-              Container(
-                height: 200,
-                child: BannerView(
-                    buildBanners(),
-                    intervalDuration:Duration(seconds: 3),
-                ),
-              ),
+            _banners.length == 0
+                ? Image.network(
+                    "http://www.wanandroid.com/blogimgs/ab17e8f9-6b79-450b-8079-0f2287eb6f0f.png")
+                : Container(
+                    height: 200,
+                    width: double.infinity,
+                    child: BannerView(
+                      buildBanners(),
+                      intervalDuration: Duration(seconds: 3),
+                    ),
+                  ),
             Expanded(
               child: buildArticles(),
             ),
           ],
         ),
-      ),);
+      ),
+    );
   }
 
-  List<Widget> buildBanners(){
+  List<Widget> buildBanners() {
     List<Widget> list = new List();
-    for(bean.Banner banner in _banners){
-      list.add(Image.network(banner.imagePath));
+    for (bean.Banner banner in _banners) {
+      list.add(GestureDetector(
+        child: Image.network(
+          banner.imagePath,
+        ),
+        onTap: () {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new WebviewScaffold(
+              url: banner.url,
+            );
+          }));
+        },
+      ));
     }
     return list;
   }
@@ -68,7 +85,9 @@ class ArticlesPageState extends State<ArticlesPage> {
         itemCount: _articles.length * 2,
         itemBuilder: (BuildContext context, int i) {
           if (i.isOdd) {
-            return new Divider();
+            return new Divider(
+              color: Colors.blueGrey,
+            );
           }
           final index = i ~/ 2;
           if (index >= _articles.length - 1) {
@@ -80,24 +99,50 @@ class ArticlesPageState extends State<ArticlesPage> {
 
   //单个item元素
   Widget _buildRow(Article article, int index) {
-    return ListTile(
-      title: Text(
-        article.title,
-        maxLines: 1,
-        style: _titleFont,
+    return
+    DecoratedBox(
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(
+            color:Colors.white,
+            offset: Offset(2.0,2.0),
+            blurRadius: 4.0
+        )],
       ),
-      subtitle: Text(
-        article.desc,
-        maxLines: 1,
-        style: _descFont,
+      child: ListTile(
+        title: Text(
+          article.title,
+          maxLines: 1,
+          style: _titleFont,
+        ),
+        subtitle: Container(
+          child: Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Expanded(child:Text(article.author,),),
+              Icon(Icons.access_time,
+              size: 15,),
+              Text(article.niceDate),
+
+            ],
+          ),
+        ),
+        trailing: GestureDetector(
+          child: Icon(
+            article.collect ? Icons.favorite : Icons.favorite_border,
+            color: article.collect ? Colors.red : null,
+          ),
+          onTap: () {
+            _collect(article, index);
+          },
+        ),
+        onTap: () {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new WebviewScaffold(
+              url: article.link,
+            );
+          }));
+        },
       ),
-      trailing: new Icon(
-        article.collect ? Icons.favorite : Icons.favorite_border,
-        color: article.collect ? Colors.red : null,
-      ),
-      onTap: () {
-        _collect(article, index);
-      },
     );
   }
 
@@ -173,4 +218,7 @@ class ArticlesPageState extends State<ArticlesPage> {
       setState(() {});
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
