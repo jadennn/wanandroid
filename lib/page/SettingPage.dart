@@ -29,7 +29,7 @@ class SettingPageState extends State<SettingPage> {
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.lightBlue,
+              color: Colors.blueGrey,
               padding: EdgeInsets.all(40),
               width: double.infinity,
               child: Column(

@@ -17,13 +17,13 @@ class ArticlesPage extends StatefulWidget {
   }
 }
 
-class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClientMixin{
+class ArticlesPageState extends State<ArticlesPage>
+    with AutomaticKeepAliveClientMixin {
   final _articles = <Article>[];
   final _banners = <bean.Banner>[];
   int _page = 0;
 
   final _titleFont = const TextStyle(fontSize: 18.0, color: Colors.black);
-  final _descFont = const TextStyle(fontSize: 12.0, color: Colors.grey);
 
   @override
   void initState() {
@@ -34,29 +34,35 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-      child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            _banners.length == 0
-                ? Image.network(
-                    "http://www.wanandroid.com/blogimgs/ab17e8f9-6b79-450b-8079-0f2287eb6f0f.png")
-                : Container(
-                    height: 200,
-                    width: double.infinity,
-                    child: BannerView(
-                      buildBanners(),
-                      intervalDuration: Duration(seconds: 3),
+    if (_articles.length <= 0) {
+      return Center(
+        child: Text("加载中..."),
+      );
+    } else {
+      return SafeArea(
+        top: true,
+        child: Scaffold(
+          body: Column(
+            children: <Widget>[
+              _banners.length == 0
+                  ? Image.network(
+                      "http://www.wanandroid.com/blogimgs/ab17e8f9-6b79-450b-8079-0f2287eb6f0f.png")
+                  : Container(
+                      height: 200,
+                      width: double.infinity,
+                      child: BannerView(
+                        buildBanners(),
+                        intervalDuration: Duration(seconds: 3),
+                      ),
                     ),
-                  ),
-            Expanded(
-              child: buildArticles(),
-            ),
-          ],
+              Expanded(
+                child: buildArticles(),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   List<Widget> buildBanners() {
@@ -68,9 +74,11 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new WebviewScaffold(
-              url: banner.url,
-            );
+            return new SafeArea(
+                top: true,
+                child: WebviewScaffold(
+                  url: banner.url,
+                ));
           }));
         },
       ));
@@ -99,14 +107,12 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
 
   //单个item元素
   Widget _buildRow(Article article, int index) {
-    return
-    DecoratedBox(
+    return DecoratedBox(
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(
-            color:Colors.white,
-            offset: Offset(2.0,2.0),
-            blurRadius: 4.0
-        )],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.white, offset: Offset(2.0, 2.0), blurRadius: 4.0)
+        ],
       ),
       child: ListTile(
         title: Text(
@@ -118,18 +124,23 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
           child: Flex(
             direction: Axis.horizontal,
             children: <Widget>[
-              Expanded(child:Text(article.author,),),
-              Icon(Icons.access_time,
-              size: 15,),
+              Expanded(
+                child: Text(
+                  article.author,
+                ),
+              ),
+              Icon(
+                Icons.access_time,
+                size: 15,
+              ),
               Text(article.niceDate),
-
             ],
           ),
         ),
         trailing: GestureDetector(
           child: Icon(
             article.collect ? Icons.favorite : Icons.favorite_border,
-            color: article.collect ? Colors.red : null,
+            color: article.collect ? Colors.redAccent : null,
           ),
           onTap: () {
             _collect(article, index);
@@ -137,9 +148,11 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new WebviewScaffold(
-              url: article.link,
-            );
+            return new SafeArea(
+                top: true,
+                child: WebviewScaffold(
+                  url: article.link,
+                ));
           }));
         },
       ),
@@ -220,5 +233,5 @@ class ArticlesPageState extends State<ArticlesPage> with AutomaticKeepAliveClien
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

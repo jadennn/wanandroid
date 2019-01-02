@@ -15,17 +15,24 @@ class NavigationPage extends StatefulWidget {
   }
 }
 
-class NavigationPageState extends State<NavigationPage> with AutomaticKeepAliveClientMixin{
+class NavigationPageState extends State<NavigationPage>
+    with AutomaticKeepAliveClientMixin {
   final _navigationsList = <Navigations>[];
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-      child: ListView(
-        children: _createItems(),
-      ),
-    );
+    if (_navigationsList.length <= 0) {
+      return Center(
+        child: Text("加载中..."),
+      );
+    } else {
+      return SafeArea(
+        top: true,
+        child: ListView(
+          children: _createItems(),
+        ),
+      );
+    }
   }
 
   @override
@@ -70,7 +77,7 @@ class NavigationPageState extends State<NavigationPage> with AutomaticKeepAliveC
               child: Text(
                 n.name,
                 style: TextStyle(
-                    fontSize: 20, color: Colors.amber, letterSpacing: 4),
+                    fontSize: 20, color: Colors.redAccent, letterSpacing: 4),
               ),
             ),
             _createItem(n),
@@ -93,21 +100,24 @@ class NavigationPageState extends State<NavigationPage> with AutomaticKeepAliveC
   List<Widget> _crateItemChildren(Navigations navigation) {
     List<Widget> articles = <Widget>[];
     Paint paint = new Paint();
-    paint..color = Colors.grey;
+    paint..color = Colors.blueGrey;
     for (Article article in navigation.articles) {
       articles.add(GestureDetector(
         child: Chip(
           avatar: CircleAvatar(
-              backgroundColor: Colors.blue, child: Text(article.title[0])),
+              backgroundColor: Colors.blueGrey, child: Text(article.title[0])),
           label: Text(article.title),
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new WebviewScaffold(
-              url: article.link,
-              appBar: AppBar(title: Text(article.title),
-              backgroundColor: Colors.grey,),
-            );
+            return new SafeArea(
+                top: true,
+                child: WebviewScaffold(
+                  url: article.link,
+//              appBar: AppBar(title: Text(article.title),
+//              backgroundColor: Colors.blueGrey,
+//            ),
+                ));
           }));
         },
       ));
@@ -116,5 +126,5 @@ class NavigationPageState extends State<NavigationPage> with AutomaticKeepAliveC
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

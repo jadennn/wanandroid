@@ -19,7 +19,7 @@ class ToastUtil{
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.blueGrey,
         textColor: Colors.white
     );
   }

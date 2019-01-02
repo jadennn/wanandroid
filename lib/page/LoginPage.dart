@@ -8,8 +8,10 @@ import 'package:wanandroid/bean/LoginInfo.dart';
 import 'package:wanandroid/bean/UserInfo.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/HomePage.dart';
+import 'package:wanandroid/page/LoadingDialog.dart';
 import 'package:wanandroid/page/RegisterPage.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //登录页
 class LoginPage extends StatefulWidget {
@@ -20,13 +22,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static String USERNAME = "username";
+  static String PASSWORD = "password";
+
   String _version = "";
-  String _username = "wanandroidtest789";
-  String _password = "wanandroidtest789";
+  String _username = "";
+  String _password = "";
 
   @override
   void initState() {
     _init();
+    _load();
     super.initState();
   }
 
@@ -120,6 +126,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginOnPressed() async {
+    LoadingDialog dialog = LoadingDialog();
+    dialog.show(context);
     LoginInfo li = new LoginInfo(_username, _password);
     Result result = await NetManager.getInstance().request(
         "/user/login",
@@ -128,8 +136,10 @@ class _LoginPageState extends State<LoginPage> {
             method: "POST",
             contentType:
                 ContentType.parse("application/x-www-form-urlencoded")));
+    dialog.dismiss(context);
     if (result.errorCode == 0) {
       ToastUtil.showTips("登陆成功");
+      _save();
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(
@@ -138,8 +148,31 @@ class _LoginPageState extends State<LoginPage> {
               },),
               (route) => route == null);
     } else {
+      _clear();
       ToastUtil.showError(result.errorMsg);
     }
+  }
+
+  //获取已经登录的账号和密码
+  void _load() async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    _username = sp.getString(USERNAME) == null ? "" : sp.getString(USERNAME);
+    _password = sp.getString(PASSWORD) == null ? "" : sp.getString(PASSWORD);
+  }
+
+  //保存账号密码
+  void _save() async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString(USERNAME, _username);
+    sp.setString(PASSWORD, _password);
+  }
+
+  //登录失败，清除保存的账号密码
+  void _clear(){
+    setState(() {
+      _password = "";
+    });
+    _save();
   }
 
   //获取版本号

@@ -17,12 +17,12 @@ class ProjectPage extends StatefulWidget {
 }
 
 class ProjectPageState extends State<ProjectPage>
-    with TickerProviderStateMixin , AutomaticKeepAliveClientMixin{
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _projectCategoryList = <ProjectCategory>[];
   TabController _tabController;
   final _articles = <Article>[];
   final _titleFont = const TextStyle(fontSize: 18.0, color: Colors.black);
-  final _descFont = const TextStyle(fontSize: 12.0, color: Colors.grey);
+  final _descFont = const TextStyle(fontSize: 12.0, color: Colors.blueGrey);
   int _tabIndex = 0;
   int _cid = 0;
   int _page = 1;
@@ -60,20 +60,27 @@ class ProjectPageState extends State<ProjectPage>
       }
     });
     _tabController.index = _tabIndex;
-    return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey,
-        title: TabBar(
-          controller: _tabController,
-          tabs: categorys,
-          indicatorColor: Colors.white,
-          isScrollable: true,
+
+    if (_projectCategoryList.length <= 0 || _articles.length <= 0) {
+      return Center(
+        child: Text("加载中..."),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.blueGrey,
+          title: TabBar(
+            controller: _tabController,
+            tabs: categorys,
+            indicatorColor: Colors.white,
+            isScrollable: true,
+          ),
         ),
-      ),
-      body: buildArticles(),
-    );
+        body: buildArticles(),
+      );
+    }
   }
 
   //获取项目分类
@@ -149,16 +156,21 @@ class ProjectPageState extends State<ProjectPage>
         child: Flex(
           direction: Axis.horizontal,
           children: <Widget>[
-            Expanded(child:Text(article.author,),),
-            Icon(Icons.access_time,
-              size: 15,),
+            Expanded(
+              child: Text(
+                article.author,
+              ),
+            ),
+            Icon(
+              Icons.access_time,
+              size: 15,
+            ),
             Text(article.niceDate),
-
           ],
         ),
       ),
       trailing: GestureDetector(
-        onTap: (){
+        onTap: () {
           _collect(article, index);
         },
         child: new Icon(
@@ -168,9 +180,11 @@ class ProjectPageState extends State<ProjectPage>
       ),
       onTap: () {
         Navigator.push(context, new MaterialPageRoute(builder: (context) {
-          return new WebviewScaffold(
-            url: article.link,
-          );
+          return new SafeArea(
+              top: true,
+              child: WebviewScaffold(
+                url: article.link,
+              ));
         }));
       },
     );
@@ -215,5 +229,5 @@ class ProjectPageState extends State<ProjectPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wanandroid/page/LoginPage.dart';
 
 void main() {
   runApp(Page());
+  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.blueGrey);
+  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 }
 
 class Page extends StatelessWidget{

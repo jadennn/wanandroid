@@ -14,8 +14,7 @@ class Navigations extends StatelessWidget {
     return DecoratedBox(decoration: BoxDecoration(
       color: Color.fromARGB(255, 240, 240, 240),
     ),
-    child: Flex(
-      direction: Axis.horizontal,
+    child: Row(
       children: <Widget>[
         Expanded(
           child: GestureDetector(
@@ -25,7 +24,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation("文章", Icons.library_books,
-                page == 0 ? Colors.green : Colors.grey),
+                page == 0 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
         Expanded(
@@ -36,7 +35,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation(
-                "项目", Icons.archive, page == 1 ? Colors.green : Colors.grey),
+                "项目", Icons.archive, page == 1 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
         Expanded(
@@ -47,7 +46,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation(
-                "导航", Icons.bookmark, page == 2 ? Colors.green : Colors.grey),
+                "导航", Icons.bookmark, page == 2 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
         Expanded(
@@ -58,7 +57,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation("收藏", Icons.collections_bookmark,
-                page == 3 ? Colors.green : Colors.grey),
+                page == 3 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
       ],

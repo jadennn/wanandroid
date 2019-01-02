@@ -17,11 +17,12 @@ class CollectionArticlesPage extends StatefulWidget {
   }
 }
 
-class CollectionArticlesPageState extends State<CollectionArticlesPage> with AutomaticKeepAliveClientMixin{
+class CollectionArticlesPageState extends State<CollectionArticlesPage>
+    with AutomaticKeepAliveClientMixin {
   final _articles = <Article>[];
   int _page = 0;
   final _titleFont = const TextStyle(fontSize: 18.0, color: Colors.black);
-  final _descFont = const TextStyle(fontSize: 12.0, color: Colors.grey);
+  final _descFont = const TextStyle(fontSize: 12.0, color: Colors.blueGrey);
 
   @override
   void initState() {
@@ -31,12 +32,18 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage> with Aut
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-      child: MaterialApp(
-        home: buildArticles(),
-      ),
-    );
+    if (_articles.length <= 0) {
+      return Center(
+        child: Text("加载中..."),
+      );
+    } else {
+      return SafeArea(
+        top: true,
+        child: MaterialApp(
+          home: buildArticles(),
+        ),
+      );
+    }
   }
 
   //单个item的绘制
@@ -51,18 +58,23 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage> with Aut
         child: Flex(
           direction: Axis.horizontal,
           children: <Widget>[
-            Expanded(child:Text(article.author,),),
-            Icon(Icons.access_time,
-              size: 15,),
+            Expanded(
+              child: Text(
+                article.author,
+              ),
+            ),
+            Icon(
+              Icons.access_time,
+              size: 15,
+            ),
             Text(article.niceDate),
-
           ],
         ),
       ),
       trailing: GestureDetector(
         child: new Icon(
           Icons.favorite,
-          color: Colors.red,
+          color: Colors.redAccent,
         ),
         onTap: () {
           _cancelCollection(article, index);
@@ -70,9 +82,11 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage> with Aut
       ),
       onTap: () {
         Navigator.push(context, new MaterialPageRoute(builder: (context) {
-          return new WebviewScaffold(
-            url: article.link,
-          );
+          return new SafeArea(
+              top: true,
+              child: WebviewScaffold(
+                url: article.link,
+              ));
         }));
       },
     );
@@ -113,7 +127,7 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage> with Aut
   void _cancelCollection(Article article, int index) async {
     Result result = await NetManager.getInstance().request(
         "/lg/uncollect/${article.id}/json",
-        "originId=${article.originId==null?-1:article.originId}",
+        "originId=${article.originId == null ? -1 : article.originId}",
         Options(
           method: "POST",
           contentType: ContentType.parse("application/x-www-form-urlencoded"),
@@ -128,5 +142,5 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage> with Aut
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }
