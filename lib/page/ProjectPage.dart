@@ -6,6 +6,7 @@ import 'package:wanandroid/bean/Articles.dart';
 import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/bean/ProjectCategory.dart';
+import 'package:wanandroid/page/TopAreaWidget.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 
 //项目页
@@ -62,9 +63,9 @@ class ProjectPageState extends State<ProjectPage>
     _tabController.index = _tabIndex;
 
     if (_projectCategoryList.length <= 0 || _articles.length <= 0) {
-      return Center(
+      return TopAreaWidget(child: Center(
         child: Text("加载中..."),
-      );
+      ));
     } else {
       return Scaffold(
         appBar: AppBar(
@@ -180,8 +181,7 @@ class ProjectPageState extends State<ProjectPage>
       ),
       onTap: () {
         Navigator.push(context, new MaterialPageRoute(builder: (context) {
-          return new SafeArea(
-              top: true,
+          return new TopAreaWidget(
               child: WebviewScaffold(
                 url: article.link,
               ));

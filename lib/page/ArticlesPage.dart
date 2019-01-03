@@ -6,6 +6,7 @@ import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Articles.dart';
 import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/net/NetManager.dart';
+import 'package:wanandroid/page/TopAreaWidget.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 import 'package:wanandroid/bean/Banner.dart' as bean;
 
@@ -35,12 +36,11 @@ class ArticlesPageState extends State<ArticlesPage>
   @override
   Widget build(BuildContext context) {
     if (_articles.length <= 0) {
-      return Center(
+      return TopAreaWidget(child: Center(
         child: Text("加载中..."),
-      );
+      ));
     } else {
-      return SafeArea(
-        top: true,
+      return TopAreaWidget(
         child: Scaffold(
           body: Column(
             children: <Widget>[
@@ -74,8 +74,7 @@ class ArticlesPageState extends State<ArticlesPage>
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new SafeArea(
-                top: true,
+            return new TopAreaWidget(
                 child: WebviewScaffold(
                   url: banner.url,
                 ));
@@ -148,8 +147,7 @@ class ArticlesPageState extends State<ArticlesPage>
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new SafeArea(
-                top: true,
+            return new TopAreaWidget(
                 child: WebviewScaffold(
                   url: article.link,
                 ));

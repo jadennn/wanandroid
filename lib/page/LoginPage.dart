@@ -12,6 +12,7 @@ import 'package:wanandroid/page/LoadingDialog.dart';
 import 'package:wanandroid/page/RegisterPage.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
 
 //登录页
 class LoginPage extends StatefulWidget {
@@ -89,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        new MaterialPageRoute(builder: (context) {
+                        new CupertinoPageRoute(builder: (context) {
                       return new RegisterPage();
                     })).then((value) {
                       setState(() {

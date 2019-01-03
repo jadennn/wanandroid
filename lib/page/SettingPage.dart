@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wanandroid/bean/UserInfo.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/LoginPage.dart';
+import 'package:wanandroid/page/TopAreaWidget.dart';
 
 class SettingPage extends StatefulWidget {
   final UserInfo userInfo;
@@ -22,8 +23,7 @@ class SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
+    return TopAreaWidget(
       child: Container(
         alignment: Alignment.centerLeft,
         child: Column(

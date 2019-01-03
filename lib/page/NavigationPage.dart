@@ -5,6 +5,7 @@ import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Navigations.dart';
 import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/net/NetManager.dart';
+import 'package:wanandroid/page/TopAreaWidget.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
 
 //导航页
@@ -22,12 +23,11 @@ class NavigationPageState extends State<NavigationPage>
   @override
   Widget build(BuildContext context) {
     if (_navigationsList.length <= 0) {
-      return Center(
+      return TopAreaWidget(child: Center(
         child: Text("加载中..."),
-      );
+      ),);
     } else {
-      return SafeArea(
-        top: true,
+      return TopAreaWidget(
         child: ListView(
           children: _createItems(),
         ),
@@ -110,8 +110,7 @@ class NavigationPageState extends State<NavigationPage>
         ),
         onTap: () {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new SafeArea(
-                top: true,
+            return new TopAreaWidget(
                 child: WebviewScaffold(
                   url: article.link,
 //              appBar: AppBar(title: Text(article.title),
