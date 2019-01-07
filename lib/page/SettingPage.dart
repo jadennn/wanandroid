@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/bean/UserInfo.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/LoginPage.dart';
 import 'package:wanandroid/page/TopAreaWidget.dart';
@@ -72,7 +73,7 @@ class SettingPageState extends State<SettingPage> {
                       child: Icon(Icons.exit_to_app),
                     ),
                     Text(
-                      "退出当前账号",
+                      ProjectLocalizations.of(context).quitAccount,
                       style: TextStyle(
                         fontSize: 16,
                       ),

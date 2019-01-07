@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 
 //底部导航栏
 class Navigations extends StatelessWidget {
@@ -23,7 +24,7 @@ class Navigations extends StatelessWidget {
                 onTap(0);
               }
             },
-            child: Navigation("文章", Icons.library_books,
+            child: Navigation(ProjectLocalizations.of(context).article, Icons.library_books,
                 page == 0 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
@@ -35,7 +36,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation(
-                "项目", Icons.archive, page == 1 ? Colors.redAccent : Colors.blueGrey),
+                ProjectLocalizations.of(context).project, Icons.archive, page == 1 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
         Expanded(
@@ -46,7 +47,7 @@ class Navigations extends StatelessWidget {
               }
             },
             child: Navigation(
-                "导航", Icons.bookmark, page == 2 ? Colors.redAccent : Colors.blueGrey),
+                ProjectLocalizations.of(context).navigation, Icons.bookmark, page == 2 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
         Expanded(
@@ -56,7 +57,7 @@ class Navigations extends StatelessWidget {
                 onTap(3);
               }
             },
-            child: Navigation("收藏", Icons.collections_bookmark,
+            child: Navigation(ProjectLocalizations.of(context).collection, Icons.collections_bookmark,
                 page == 3 ? Colors.redAccent : Colors.blueGrey),
           ),
         ),
@@ -76,7 +77,7 @@ class Navigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 50),
+      constraints: BoxConstraints(maxHeight: 55),
       child: Column(
         children: <Widget>[
           Padding(

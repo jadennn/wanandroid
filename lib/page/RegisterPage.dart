@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wanandroid/bean/Result.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/bean/RegisterInfo.dart';
 import 'package:dio/dio.dart';
@@ -48,19 +49,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         TextField(
-                          decoration: InputDecoration(labelText: "账号"),
+                          decoration: InputDecoration(labelText: ProjectLocalizations.of(context).account),
                           onChanged: _onUsernameChanged,
                         ),
                         TextField(
                           decoration: InputDecoration(
-                            labelText: "密码",
+                            labelText: ProjectLocalizations.of(context).password,
                           ),
                           obscureText: true,
                           onChanged: _onPasswordChanged,
                         ),
                         TextField(
                           decoration: InputDecoration(
-                            labelText: "确认密码",
+                            labelText: ProjectLocalizations.of(context).confirmPassword,
                           ),
                           obscureText: true,
                           onChanged: _onRePasswordChanged,
@@ -70,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: Colors.blueGrey,
                               textColor: Colors.white,
                               onPressed: _registerOnPressed,
-                              child: Text("注册")),
+                              child: Text(ProjectLocalizations.of(context).register)),
                           width: 2000,
                           margin: EdgeInsets.only(top: 30),
                         ),
@@ -105,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
             contentType:
                 ContentType.parse("application/x-www-form-urlencoded")));
     if (result.errorCode == 0) {
-      ToastUtil.showTips("注册成功");
+      ToastUtil.showTips(ProjectLocalizations.of(context).registerSuccess);
       Navigator.pop(context, _username);
     } else {
       ToastUtil.showError(result.errorMsg);

@@ -4,6 +4,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Articles.dart';
 import 'package:wanandroid/bean/Result.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/bean/ProjectCategory.dart';
 import 'package:wanandroid/page/TopAreaWidget.dart';
@@ -64,7 +65,7 @@ class ProjectPageState extends State<ProjectPage>
 
     if (_projectCategoryList.length <= 0 || _articles.length <= 0) {
       return TopAreaWidget(child: Center(
-        child: Text("加载中..."),
+        child: Text(ProjectLocalizations.of(context).loading),
       ));
     } else {
       return Scaffold(
@@ -198,7 +199,7 @@ class ProjectPageState extends State<ProjectPage>
           null,
           Options(method: "POST"));
       if (result.errorCode == 0) {
-        ToastUtil.showTips("取消收藏成功");
+        ToastUtil.showTips(ProjectLocalizations.of(context).cancelCollectSuccess);
         article.collect = !article.collect;
         _articles.removeAt(index);
         _articles.insert(index, article);
@@ -210,7 +211,7 @@ class ProjectPageState extends State<ProjectPage>
       Result result = await NetManager.getInstance().request(
           "/lg/collect/${article.id}/json", null, Options(method: "POST"));
       if (result.errorCode == 0) {
-        ToastUtil.showTips("收藏成功");
+        ToastUtil.showTips(ProjectLocalizations.of(context).collectSuccess);
         article.collect = !article.collect;
         _articles.removeAt(index);
         _articles.insert(index, article);

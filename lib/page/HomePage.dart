@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/bean/UserInfo.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/page/ArticlesPage.dart';
 import 'package:wanandroid/page/CollectionArticlesPage.dart';
 import 'package:wanandroid/page/NavigationPage.dart';
@@ -53,7 +54,7 @@ class HomePageState extends State<HomePage> {
               DateTime.now().difference(_lastPressedTime) >
                   Duration(seconds: 1)) {
             _lastPressedTime = DateTime.now();
-            ToastUtil.showTips("快速点击两次退出");
+            ToastUtil.showTips(ProjectLocalizations.of(context).doubleClick);
             return false;
           }
           return true;

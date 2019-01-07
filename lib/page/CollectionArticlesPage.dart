@@ -6,6 +6,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Articles.dart';
 import 'package:wanandroid/bean/Result.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/TopAreaWidget.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
@@ -35,7 +36,7 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>
   Widget build(BuildContext context) {
     if (_articles.length <= 0) {
       return TopAreaWidget(child: Center(
-        child: Text("加载中..."),
+        child: Text(ProjectLocalizations.of(context).loading),
       ));
     } else {
       return TopAreaWidget(
@@ -132,7 +133,7 @@ class CollectionArticlesPageState extends State<CollectionArticlesPage>
           contentType: ContentType.parse("application/x-www-form-urlencoded"),
         ));
     if (result.errorCode == 0) {
-      ToastUtil.showTips("取消收藏成功");
+      ToastUtil.showTips(ProjectLocalizations.of(context).cancelCollectSuccess);
       _articles.removeAt(index);
     } else {
       ToastUtil.showError(result.errorMsg);

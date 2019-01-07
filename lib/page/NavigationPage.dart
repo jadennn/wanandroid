@@ -4,6 +4,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:wanandroid/bean/Article.dart';
 import 'package:wanandroid/bean/Navigations.dart';
 import 'package:wanandroid/bean/Result.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/TopAreaWidget.dart';
 import 'package:wanandroid/util/ToastUtil.dart';
@@ -24,7 +25,7 @@ class NavigationPageState extends State<NavigationPage>
   Widget build(BuildContext context) {
     if (_navigationsList.length <= 0) {
       return TopAreaWidget(child: Center(
-        child: Text("加载中..."),
+        child: Text(ProjectLocalizations.of(context).loading),
       ),);
     } else {
       return TopAreaWidget(

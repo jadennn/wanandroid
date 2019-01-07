@@ -6,6 +6,7 @@ import 'package:package_info/package_info.dart';
 import 'package:wanandroid/bean/Result.dart';
 import 'package:wanandroid/bean/LoginInfo.dart';
 import 'package:wanandroid/bean/UserInfo.dart';
+import 'package:wanandroid/locale/ProjectLocalizations.dart';
 import 'package:wanandroid/net/NetManager.dart';
 import 'package:wanandroid/page/HomePage.dart';
 import 'package:wanandroid/page/LoadingDialog.dart';
@@ -62,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                     selection: TextSelection.fromPosition(TextPosition(
                         affinity: TextAffinity.downstream,
                         offset: _username == null ? 0 : _username.length)))),
-                decoration: InputDecoration(labelText: "账号"),
+                decoration: InputDecoration(
+                    labelText: ProjectLocalizations.of(context).account),
                 onChanged: _onUsernameChanged,
               ),
               TextField(
@@ -72,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                         affinity: TextAffinity.downstream,
                         offset: _password == null ? 0 : _password.length)))),
                 decoration: InputDecoration(
-                  labelText: "密码",
+                  labelText: ProjectLocalizations.of(context).password,
                 ),
                 obscureText: true,
                 onChanged: _onPasswordChanged,
@@ -82,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.blueGrey,
                     textColor: Colors.white,
                     onPressed: _loginOnPressed,
-                    child: Text("登陆")),
+                    child: Text(ProjectLocalizations.of(context).login)),
                 width: 2000,
                 margin: EdgeInsets.only(top: 30),
               ),
@@ -101,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     });
                   },
                   child: Text(
-                    "注册账号",
+                    ProjectLocalizations.of(context).register,
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
@@ -139,15 +141,13 @@ class _LoginPageState extends State<LoginPage> {
                 ContentType.parse("application/x-www-form-urlencoded")));
     dialog.dismiss(context);
     if (result.errorCode == 0) {
-      ToastUtil.showTips("登陆成功");
+      ToastUtil.showTips(ProjectLocalizations.of(context).loginSuccess);
       _save();
-      Navigator.pushAndRemoveUntil(
-          context,
-          new MaterialPageRoute(
-              builder: (context) {
-                return new HomePage(userInfo: UserInfo.fromJson(result.data));
-              },),
-              (route) => route == null);
+      Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(
+        builder: (context) {
+          return new HomePage(userInfo: UserInfo.fromJson(result.data));
+        },
+      ), (route) => route == null);
     } else {
       _clear();
       ToastUtil.showError(result.errorMsg);
@@ -155,21 +155,21 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //获取已经登录的账号和密码
-  void _load() async{
+  void _load() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _username = sp.getString(USERNAME) == null ? "" : sp.getString(USERNAME);
     _password = sp.getString(PASSWORD) == null ? "" : sp.getString(PASSWORD);
   }
 
   //保存账号密码
-  void _save() async{
+  void _save() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(USERNAME, _username);
     sp.setString(PASSWORD, _password);
   }
 
   //登录失败，清除保存的账号密码
-  void _clear(){
+  void _clear() {
     setState(() {
       _password = "";
     });

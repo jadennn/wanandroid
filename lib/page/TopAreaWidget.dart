@@ -10,7 +10,7 @@ class TopAreaWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     EdgeInsets padding = MediaQuery.of(context).padding;
-    double top = math.max(padding.top , 0);
+    double top = math.max(padding.top , EdgeInsets.zero.top);
 
     return Flex(
       direction: Axis.vertical,
